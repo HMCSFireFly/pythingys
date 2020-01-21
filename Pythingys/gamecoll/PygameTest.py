@@ -12,10 +12,10 @@ char = pygame.image.load('idle.png')
 JL = pygame.image.load('L7.png')
 JR = pygame.image.load('R7.png')
 clock = pygame.time.Clock()
-
+p = pygame.image.load('platform.png')
 f = 0
 v=5
-
+a = 0
 class player:
     def __init__(self,x,y,height,width):
         self.x = x
@@ -50,6 +50,7 @@ def redrawGameWindow():
     win.blit(bg, (f-600,0))
     win.blit(bg, (f,0))
     win.blit(bg, (f+600,0))
+    win.blit(p, (f+230,278))
     man.draw(win)
     floor()
     
@@ -63,7 +64,7 @@ while run:
         if event.type == pygame.QUIT:
             run = False
     
-    keys = pygame.key.get_pressed() ; pygame.key.get_mods()
+    keys = pygame.key.get_pressed() 
     
     if keys[pygame.K_a]:
         man.x -= man.vel
@@ -85,10 +86,9 @@ while run:
         man.vel = 5
         v = 5
     if not(man.isJump):
+        ##Space##
         if keys[pygame.K_SPACE]:
             man.isJump = True
-            man.left = False
-            man.right = False
             man.walkcount = 0
     else:
         if man.jumpCount >= -10:
@@ -109,6 +109,23 @@ while run:
     if man.x <= 50:
         man.x = man.x + man.vel
         f += v
+    #-------------landscape-------------#
+    #moc plat#
+    if man.y >= 200 and man.y <= 220 and man.x >= 200 and man.x <= 300:
+        print('touch')
+        man.y = 210
+        man.isJump = False
+        man.jumpCount = 10
+        if keys[pygame.K_SPACE]:
+            man.isJump = True
+        
+        
+                    
+    
+    
+    
+    
+    #-----------------------------------#
     if f >= 600:
         f = 0
     elif f <= -600:
@@ -117,14 +134,14 @@ while run:
         man.y = 270
     man.y = man.y + 10
     
-    print (man.x)    
-    print (man.y)
-    print (f)
-    
-  
-    
+    print ('x : ',man.x)    
+    print ('y :',man.y)
+    print ('Scroll :', f)
+    print ('keys :',keys[pygame.K_a],keys[pygame.K_d],keys[pygame.K_SPACE],keys[pygame.K_LSHIFT])
+    print (man.isJump)
+    print (man.jumpCount)
     pygame.display.update()
-    #-------------landscape-------------#
+    
     
    
    
