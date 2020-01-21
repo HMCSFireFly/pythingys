@@ -1,10 +1,7 @@
 import pygame
 pygame.init()
-
 win = pygame.display.set_mode((600,500))
-
 pygame.display.set_caption("Test Game")
-
 walkright = [pygame.image.load('R1.png'), pygame.image.load('R2.png'), pygame.image.load('R3.png'), pygame.image.load('R4.png'), pygame.image.load('R5.png'), pygame.image.load('R6.png'), pygame.image.load('R3.png'), pygame.image.load('R2.png'), pygame.image.load('R6.png')]
 walkleft = [pygame.image.load('L1.png'), pygame.image.load('L2.png'), pygame.image.load('L3.png'), pygame.image.load('L4.png'), pygame.image.load('L5.png'), pygame.image.load('L6.png'), pygame.image.load('L3.png'), pygame.image.load('L2.png'), pygame.image.load('L6.png')]
 bg = pygame.image.load('bg.jpg')
@@ -28,7 +25,7 @@ class player:
         self.left = False
         self.right = False
         self.walkcount = 0
-        
+    #player's draw function#    
     def draw(self,win):
         if self.walkcount + 1 >= 27:
             self.walkcount = 0
@@ -41,31 +38,27 @@ class player:
         else:
             win.blit(char,(self.x,self.y))
             pygame.display.update()
+#mock floor#
 def floor():
     pygame.Rect(0,270,600,500)
-    
-
+#redraw#
 def redrawGameWindow():
     global walkcount
     win.blit(bg, (f-600,0))
     win.blit(bg, (f,0))
     win.blit(bg, (f+600,0))
-    win.blit(p, (f+230,278))
+    win.blit(p, (a+230,278))
     man.draw(win)
     floor()
-    
-
+#begin#
 man = player(70,270,64,64)
 run = True
 while run:
     clock.tick(27)
-    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-    
     keys = pygame.key.get_pressed() 
-    
     if keys[pygame.K_a]:
         man.x -= man.vel
         man.left = True
@@ -73,8 +66,7 @@ while run:
     elif keys[pygame.K_d]:
         man.x += man.vel
         man.right = True
-        man.left = False
-        
+        man.left = False     
     else:
         man.right = False
         man.left = False
@@ -96,35 +88,27 @@ while run:
             if man.jumpCount < 0:
                 neg = -1
             man.y -= (man.jumpCount ** 2) * 0.5* neg
-            man.jumpCount -= 1
-            
-                
+            man.jumpCount -= 1      
         else:
             man.isJump = False
             man.jumpCount = 10    
-    
     if man.x >= 460:
         man.x = man.x - man.vel
         f -= v
+        a -= v
     if man.x <= 50:
         man.x = man.x + man.vel
         f += v
+        a += v
     #-------------landscape-------------#
     #moc plat#
-    if man.y >= 200 and man.y <= 220 and man.x >= 200 and man.x <= 300:
+    if man.y >= 200 and man.y <= 220 and man.x >= a+200 and man.x <= a+300:
         print('touch')
         man.y = 210
         man.isJump = False
         man.jumpCount = 10
         if keys[pygame.K_SPACE]:
             man.isJump = True
-        
-        
-                    
-    
-    
-    
-    
     #-----------------------------------#
     if f >= 600:
         f = 0
@@ -133,20 +117,13 @@ while run:
     if man.y >= 270:
         man.y = 270
     man.y = man.y + 10
-    
     print ('x : ',man.x)    
     print ('y :',man.y)
+    print ('location : ',a)
     print ('Scroll :', f)
     print ('keys :',keys[pygame.K_a],keys[pygame.K_d],keys[pygame.K_SPACE],keys[pygame.K_LSHIFT])
     print (man.isJump)
     print (man.jumpCount)
     pygame.display.update()
-    
-    
-   
-   
-   
-    redrawGameWindow()
-   
+    redrawGameWindow()  
 pygame.quit()
-
