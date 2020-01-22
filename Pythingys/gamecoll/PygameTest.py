@@ -9,10 +9,13 @@ char = pygame.image.load('idle.png')
 JL = pygame.image.load('L7.png')
 JR = pygame.image.load('R7.png')
 clock = pygame.time.Clock()
+house = pygame.image.load('house.png')
 p = pygame.image.load('platform.png')
 f = 0
 v=5
 a = 0
+
+
 class player:
     def __init__(self,x,y,height,width):
         self.x = x
@@ -47,7 +50,8 @@ def redrawGameWindow():
     win.blit(bg, (f-600,0))
     win.blit(bg, (f,0))
     win.blit(bg, (f+600,0))
-    win.blit(p, (a+230,278))
+    win.blit(house, (f+120,270))
+    win.blit(p, (a+230,268))
     man.draw(win)
     floor()
 #begin#
@@ -102,13 +106,16 @@ while run:
         a += v
     #-------------landscape-------------#
     #moc plat#
-    if man.y >= 200 and man.y <= 220 and man.x >= a+200 and man.x <= a+300:
-        print('touch')
-        man.y = 210
-        man.isJump = False
-        man.jumpCount = 10
-        if keys[pygame.K_SPACE]:
-            man.isJump = True
+    def platform(xx,yy):
+        if man.y >= yy and man.y <= yy+20 and man.x >= a+xx and man.x <= a+xx+100:
+            print('This is a platform, it took quite a few hours of trial and error to get this right and make it work like a platform')
+            man.y = yy
+            man.isJump = False
+            man.jumpCount = 10
+            if keys[pygame.K_SPACE]:
+                man.isJump = True
+                
+    platform(200,200)
     #-----------------------------------#
     if f >= 600:
         f = 0
@@ -117,7 +124,7 @@ while run:
     if man.y >= 270:
         man.y = 270
     man.y = man.y + 10
-    print ('x : ',man.x)    
+    print ('x :',man.x)    
     print ('y :',man.y)
     print ('location : ',a)
     print ('Scroll :', f)
