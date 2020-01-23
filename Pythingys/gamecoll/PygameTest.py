@@ -10,11 +10,12 @@ JL = pygame.image.load('L7.png')
 JR = pygame.image.load('R7.png')
 clock = pygame.time.Clock()
 house = pygame.image.load('house.png')
+IN = pygame.image.load('INSIDE.png')
 p = pygame.image.load('platform.png')
 f = 0
 v=5
 a = 0
-
+H = 0
 
 class player:
     def __init__(self,x,y,height,width):
@@ -47,13 +48,17 @@ def floor():
 #redraw#
 def redrawGameWindow():
     global walkcount
-    win.blit(bg, (f-600,0))
-    win.blit(bg, (f,0))
-    win.blit(bg, (f+600,0))
-    win.blit(house, (f+120,270))
-    win.blit(p, (a+230,268))
-    man.draw(win)
-    floor()
+    if H == 0:
+        win.blit(bg, (f-600,0))
+        win.blit(bg, (f,0))
+        win.blit(bg, (f+600,0))
+        win.blit(house, (f+300,130))
+        win.blit(p, (a+230,268))
+        man.draw(win)
+    if H == 1:
+        win.blit(IN,(0,0))
+        man.draw(win)
+    
 #begin#
 man = player(70,270,64,64)
 run = True
@@ -62,7 +67,15 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-    keys = pygame.key.get_pressed() 
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_j]:
+        if man.x >= 420 and man.x <= 455 and man.y >= 165:    
+            H = 1
+    if keys[pygame.K_k]:
+        if man.x >= 80 and man.x <= 180 and man.y >= 160: 
+            if H == 1:
+                H = 0
+            pygame.draw.rect(win, (0,0,0),(0,0,600,500))
     if keys[pygame.K_a]:
         man.x -= man.vel
         man.left = True
@@ -98,12 +111,14 @@ while run:
             man.jumpCount = 10    
     if man.x >= 460:
         man.x = man.x - man.vel
-        f -= v
-        a -= v
+        if H == 0:    
+            f -= v
+            a -= v
     if man.x <= 50:
         man.x = man.x + man.vel
-        f += v
-        a += v
+        if H == 0:
+            f += v
+            a += v
     #-------------landscape-------------#
     #moc plat#
     def platform(xx,yy):
@@ -114,8 +129,8 @@ while run:
             man.jumpCount = 10
             if keys[pygame.K_SPACE]:
                 man.isJump = True
-                
-    platform(200,200)
+    if H == 0:            
+        platform(200,200)
     #-----------------------------------#
     if f >= 600:
         f = 0
@@ -129,8 +144,9 @@ while run:
     print ('location : ',a)
     print ('Scroll :', f)
     print ('keys :',keys[pygame.K_a],keys[pygame.K_d],keys[pygame.K_SPACE],keys[pygame.K_LSHIFT])
-    print (man.isJump)
-    print (man.jumpCount)
+    print ('iJ',man.isJump)
+    print ('jC',man.jumpCount)
+    print ('inside?',H)
     pygame.display.update()
     redrawGameWindow()  
 pygame.quit()
